@@ -1,19 +1,31 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QApplication, QGridLayout, QLabel, QLineEdit, QMainWindow, QPushButton, QTextBrowser, QWidget
+from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QLineEdit, 
+                               QMainWindow, QPushButton, QTextBrowser, QVBoxLayout, QWidget)
 import sys
 
 class MainApp(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        user_label = QLabel("Test")
-        self.user_input = QLineEdit()
-        self.enter_input_btn = QPushButton("SEND")
+
+        # output area 
+        self.ai_output_box = QTextBrowser()
+
+        # enter text widget 
+        user_message_widget = QWidget()
+        # user_label = QLabel("Test")
+        self.user_input = QLineEdit() # user input 
+        # self.user_input.returnPressed.connect() # CONNECT TO API SEND FUNCTION 
+        # self.enter_input_btn = QPushButton("SEND")
+        user_message_layout = QGridLayout()
+        # user_message_layout.addWidget(user_label, 0, 0)
+        user_message_layout.addWidget(self.user_input, 0, 0)
+        # user_message_layout.addWidget(self.enter_input_btn, 0, 1)
+        user_message_widget.setLayout(user_message_layout)
 
         main_widget = QWidget()
-        main_layout = QGridLayout()
-        main_layout.addWidget(user_label, 0, 0)
-        main_layout.addWidget(self.user_input, 0, 1)
-        main_layout.addWidget(self.enter_input_btn, 0, 2)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(self.ai_output_box)
+        main_layout.addWidget(user_message_widget)
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
 
