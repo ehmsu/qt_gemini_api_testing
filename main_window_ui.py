@@ -2,21 +2,26 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QLineEdit, 
                                QMainWindow, QPushButton, QTextBrowser, QVBoxLayout, QWidget)
 import sys
+from main_window import Gemini
 
 class MainApp(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
+
+        self.gemini = Gemini()
 
         # output area 
         self.ai_output_box = QTextBrowser()
 
         # enter text widget 
         user_message_widget = QWidget()
+        user_message_widget.setContentsMargins(0, 0, 0, 0)
         # user_label = QLabel("Test")
         self.user_input = QLineEdit() # user input 
-        # self.user_input.returnPressed.connect() # CONNECT TO API SEND FUNCTION 
+        self.user_input.returnPressed.connect(lambda: self.give_text_to_gemini(self.user_input.text())) # CONNECT TO API SEND FUNCTION 
         # self.enter_input_btn = QPushButton("SEND")
         user_message_layout = QGridLayout()
+        user_message_layout.setContentsMargins(0, 0, 0, 0)
         # user_message_layout.addWidget(user_label, 0, 0)
         user_message_layout.addWidget(self.user_input, 0, 0)
         # user_message_layout.addWidget(self.enter_input_btn, 0, 1)
@@ -28,6 +33,13 @@ class MainApp(QMainWindow):
         main_layout.addWidget(user_message_widget)
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
+
+    def give_text_to_gemini(self, text):
+        text = self.gemini.text_prompt(text)
+        self.print_text_to_box(text)
+
+    def print_text_to_box(self, text):
+        self.ai_output_box.append(text+"\n")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
